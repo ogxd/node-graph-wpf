@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApp2 {
+namespace Ogxd.NodeGraph {
 
     public enum DockSide { IN, OUT }
 

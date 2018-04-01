@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Linq;
 
-namespace WpfApp2 {
+namespace Ogxd.NodeGraph {
 
     /// <summary>
     /// Interaction logic for Node.xaml
@@ -31,7 +21,8 @@ namespace WpfApp2 {
         public Dock[] outputs => stackOutputs.Children.OfType<Dock>().ToArray();
 
         public Node() {
-            InitializeComponent();
+            //InitializeComponent();
+            this.LoadViewFromUri("/Ogxd.NodeGraph;component/node.xaml");
 
             MouseDown += mouseDown;
             MouseMove += mouseMove;
@@ -70,16 +61,24 @@ namespace WpfApp2 {
             set { Canvas.SetLeft(this, value.X); Canvas.SetTop(this, value.Y); }
         }
 
-        public void addInput(Dock dock) {
+        public Dock addInput(int type) {
+            Dock dock = new Dock(this, type, DockSide.IN);
             stackInputs.Children.Add(dock);
+            //RenderSize = MeasureOverride(RenderSize);
+            //RenderSize = ArrangeOverride(new Size(double.MaxValue, double.MaxValue));
+            //Measure(new Size(double.MaxValue, double.MaxValue));
+            return dock;
         }
 
         public void removeInput(Dock dock) {
             stackInputs.Children.Remove(dock);
         }
 
-        public void addOutput(Dock dock) {
+        public Dock addOutput(int type) {
+            Dock dock = new Dock(this, type, DockSide.OUT);
             stackOutputs.Children.Add(dock);
+            Console.WriteLine("Added to stack");
+            return dock;
         }
 
         public void removeOutput(Dock dock) {
@@ -87,36 +86,5 @@ namespace WpfApp2 {
         }
 
         public abstract void process();
-    }
-
-    public class ReaderNode : Node {
-
-        public ReaderNode() : base () {
-            addInput(new Dock(this, 0, DockSide.OUT));
-        }
-
-        public override void process() {
-        }
-    }
-
-    public class NormalsNode : Node {
-
-        public NormalsNode() : base() {
-            addInput(new Dock(this, 0, DockSide.IN));
-            addOutput(new Dock(this, 1, DockSide.OUT));
-        }
-
-        public override void process() {
-        }
-    }
-
-    public class WriterNode : Node {
-
-        public WriterNode() : base() {
-            addInput(new Dock(this, 1, DockSide.IN));
-        }
-
-        public override void process() {
-        }
     }
 }

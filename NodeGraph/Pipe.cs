@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace WpfApp2 {
+namespace Ogxd.NodeGraph {
 
     public class Pipe : IDisposable {
 
@@ -67,7 +67,8 @@ namespace WpfApp2 {
 
             this.dockA = dockA;
             this.dockB = dockB;
-            EditingPipe = this;
+            if (dockA == null || dockB == null)
+                EditingPipe = this;
 
             pathFigure.Segments.Add(bezier);
             path = new Path();

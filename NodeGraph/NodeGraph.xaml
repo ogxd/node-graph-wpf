@@ -1,13 +1,12 @@
-﻿<Border x:Class="WpfApp2.Dock"
+﻿<Border x:Class="Ogxd.NodeGraph.NodeGraph"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfApp2" MouseLeftButtonDown="Border_MouseLeftButtonDown"
-             MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave"
-             mc:Ignorable="d" Width="16" Height="16" CornerRadius="8" Background="Red" BorderBrush="Black" BorderThickness="2"
+             xmlns:local="clr-namespace:Ogxd.NodeGraph"
+             mc:Ignorable="d" Background="#28303a"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Canvas x:Name="canvas">
             
-    </Grid>
+    </Canvas>
 </Border>

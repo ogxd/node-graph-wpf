@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeGraph", "GraphNode\NodeGraph.csproj", "{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeGraph", "NodeGraph\NodeGraph.csproj", "{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

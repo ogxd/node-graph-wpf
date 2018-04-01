@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfApp2 {
+namespace Ogxd.NodeGraph {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

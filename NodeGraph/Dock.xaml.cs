@@ -31,10 +31,13 @@ namespace Ogxd.NodeGraph {
         public Dock(Node node, int type, DockSide side) {
             InitializeComponent();
 
-            Background = Extensions.GetBrush(type);
             this.type = type;
             this.side = side;
             this.node = node;
+        }
+
+        protected override void OnVisualParentChanged(DependencyObject oldParent) {
+            Background = node.graph.getPipeColor(type);
         }
 
         public Point getPositionInCanvas() {

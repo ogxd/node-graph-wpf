@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Ogxd.NodeGraph {
 
-    public class AdditionNode : Node {
+    public class DuplicaionNode : Node {
 
         public override void setConnections() {
-            addInput(0);
+            
             addInput(0);
             addOutput(0);
         }

@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1700">
     <Grid>
-        
+        <Grid x:Name="container">
+            
+        </Grid>
+        <Grid>
+            <Button Panel.ZIndex="1000" Width="100" Height="35" Content="Run" VerticalAlignment="Bottom" Click="runClick"/>
+        </Grid>
     </Grid>
 </Window>

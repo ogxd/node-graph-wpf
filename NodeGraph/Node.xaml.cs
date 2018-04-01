@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Ogxd.NodeGraph {
 
@@ -14,14 +16,13 @@ namespace Ogxd.NodeGraph {
         public delegate void NodeEventHandler(Node node);
         public event NodeEventHandler moved;
 
-        public Canvas canvas { get; private set; }
+        public NodeGraph graph { get; private set; }
         private Nullable<Point> dragStart = null;
 
-        public Dock[] inputs => stackInputs.Children.OfType<Dock>().ToArray();
-        public Dock[] outputs => stackOutputs.Children.OfType<Dock>().ToArray();
+        public Dock[] inputs => Dispatcher.Invoke(() => stackInputs.Children.OfType<Dock>().ToArray());
+        public Dock[] outputs => Dispatcher.Invoke(() => stackOutputs.Children.OfType<Dock>().ToArray());
 
         public Node() {
-            //InitializeComponent();
             this.LoadViewFromUri("/Ogxd.NodeGraph;component/node.xaml");
 
             MouseDown += mouseDown;
@@ -29,15 +30,17 @@ namespace Ogxd.NodeGraph {
             MouseUp += mouseUp;
         }
 
+        public abstract void setConnections();
+
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
             base.OnVisualParentChanged(oldParent);
-            this.canvas = Parent as Canvas;
+            this.graph = (Parent as Canvas)?.Parent as NodeGraph;
         }
 
         private void mouseMove(object sender, MouseEventArgs args) {
             if (dragStart != null && args.LeftButton == MouseButtonState.Pressed) {
                 var element = (UIElement)sender;
-                var p2 = args.GetPosition(canvas);
+                var p2 = args.GetPosition(graph.canvas);
                 Canvas.SetLeft(element, p2.X - dragStart.Value.X);
                 Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
                 moved?.Invoke(this);
@@ -85,6 +88,30 @@ namespace Ogxd.NodeGraph {
             stackOutputs.Children.Remove(dock);
         }
 
-        public abstract void process();
+        public void queryProcess() {
+
+            // Makes sure all inputs are ready for processing. Otherwise, cancel.
+            Dock[] ins = inputs;
+            foreach (Dock input in ins)
+                if (input == null)
+                    return;
+
+            // Process the data (Overriding class implementation)
+            Dispatcher.Invoke(() => { BorderBrush = Brushes.White; });
+            Thread.Sleep(1000);
+            object[] results = process(ins.Select(x => x.pipe.result).ToArray());
+            Dispatcher.Invoke(() => { BorderBrush = Brushes.Black; });
+
+            // Tranfers results to next nodes
+            Dock[] outs = outputs;
+            for (int i = 0; i < outs.Length; i++) {
+                if (outs[i].pipe != null) {
+                    outs[i].pipe.result = results[i];
+                    outs[i].pipe.dockB.node.queryProcess();
+                }
+            }
+        }
+
+        public abstract object[] process(object[] ins);
     }
 }

@@ -15,31 +15,28 @@ namespace Ogxd.NodeGraph {
 
     public static class Extensions {
 
-        public static Brush GetBrush(int type) {
-            int a = type % 10;
-            switch (a) {
-                case 0:
-                    return new SolidColorBrush(Color.FromRgb(255, 148, 77));
-                case 1:
-                    return new SolidColorBrush(Color.FromRgb(77, 166, 255)); 
-                case 2:
-                    return Brushes.Green;
-                case 3:
-                    return Brushes.Red;
-                case 4:
-                    return Brushes.Red;
-                case 5:
-                    return Brushes.Red;
-                case 6:
-                    return Brushes.Red;
-                case 7:
-                    return Brushes.Red;
-                case 8:
-                    return Brushes.Red;
-                case 9:
-                    return Brushes.Red;
-                default:
-                    return Brushes.Black;
+        public static Color GetUniqueColor(int integer) {
+
+            Random rnd = new Random(integer);
+            int hash = rnd.Next();
+
+            double iterator = Math.Abs((double)hash / (double)int.MaxValue);
+
+            byte high = 235;
+            byte low = 100;
+
+            if (iterator < 1.0 / 6.0) {
+                return Color.FromRgb(high, (byte)((iterator * 6.0) * high), low);
+            } else if (iterator < 2.0 / 6.0) {
+                return Color.FromRgb((byte)((2.0 - iterator * 6.0) * high), high, low);
+            } else if (iterator < 3.0 / 6.0) {
+                return Color.FromRgb(low, high, (byte)((iterator * 2.0) * high));
+            } else if (iterator < 4.0 / 6.0) {
+                return Color.FromRgb(low, (byte)((4.0 - iterator * 6.0) * high), high);
+            } else if (iterator < 5.0 / 6.0) {
+                return Color.FromRgb((byte)((iterator * 6.0 / 5.0) * high), low, high);
+            } else {
+                return Color.FromRgb(high, low, (byte)((6.0 - iterator * 6.0) * high));
             }
         }
 

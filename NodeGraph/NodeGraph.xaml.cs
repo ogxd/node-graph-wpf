@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,8 +20,13 @@ namespace Ogxd.NodeGraph {
     /// </summary>
     public partial class NodeGraph : Border {
 
-        // #131a24 // 19 26 36
-        // #28303a
+        public double pipeStiffness { get; set; } = 50;
+
+        public delegate Brush TypeToBrushHandler(int type);
+
+        public TypeToBrushHandler typeToBrushHandler { get; set; } = (type) => {
+            return new SolidColorBrush(Extensions.GetUniqueColor(type));
+        };
 
         public NodeGraph() {
             InitializeComponent();
@@ -37,11 +43,14 @@ namespace Ogxd.NodeGraph {
 
         public void addNode(Node node) {
             canvas.Children.Add(node);
+            node.setConnections();
         }
 
         public void tryAddNode(Node node) {
-            if (!canvas.Children.Contains(node))
+            if (!canvas.Children.Contains(node)) {
                 canvas.Children.Add(node);
+                node.setConnections();
+            }
         }
 
         public void removeNode(Node node) {
@@ -49,8 +58,30 @@ namespace Ogxd.NodeGraph {
         }
 
         public void tryRemoveNode(Node node) {
-            if (canvas.Children.Contains(node))
+            if (canvas.Children.Contains(node)) {
                 canvas.Children.Remove(node);
+            }
+        }
+
+        public Brush getPipeColor(int type) {
+            return typeToBrushHandler.Invoke(type);
+        }
+
+        public void process() {
+            var nodes = canvas.Children.OfType<Node>();
+            foreach (Node node in nodes) {
+                foreach (Dock dock in node.outputs) {
+                    if (dock.pipe != null) {
+                        dock.pipe.result = null;
+                    }
+                }
+            }
+            foreach (Node node in nodes.Where(x => x.inputs.Length == 0)) {
+                Thread thread = new Thread(new ThreadStart(() => {
+                    node.queryProcess();
+                }));
+                thread.Start();
+            }
         }
     }
 }

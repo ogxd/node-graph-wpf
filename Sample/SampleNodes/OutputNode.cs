@@ -8,11 +8,13 @@ namespace Ogxd.NodeGraph {
 
     public class ConsoleOutputNode : Node {
 
-        public ConsoleOutputNode() : base() {
+        public override void setConnections() {
             addInput(1);
         }
 
-        public override void process() {
+        public override object[] process(object[] ins) {
+            Console.WriteLine("Result : " + ins[0]);
+            return null;
         }
     }
 }

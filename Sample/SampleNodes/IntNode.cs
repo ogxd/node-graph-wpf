@@ -8,11 +8,14 @@ namespace Ogxd.NodeGraph {
 
     public class IntNode : Node {
 
-        public IntNode() : base() {
+        public override void setConnections() {
             addOutput(0);
         }
 
-        public override void process() {
+        public override object[] process(object[] ins) {
+            object[] results = new object[1];
+            results[0] = 10;
+            return results;
         }
     }
 }

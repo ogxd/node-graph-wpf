@@ -18,7 +18,10 @@ namespace Ogxd.NodeGraph {
         public readonly PathFigure pathFigure;
         public readonly BezierSegment bezier;
         public readonly Path path;
-        public Canvas canvas;
+
+        public NodeGraph graph => (dockA != null) ? dockA.node.graph : dockB.node.graph;
+
+        public object result = null;
 
         private Dock _dockA;
         public Dock dockA {
@@ -31,7 +34,6 @@ namespace Ogxd.NodeGraph {
                 _dockA = value;
                 _dockA.node.moved += NodeA_moved;
                 _dockA.pipe = this;
-                canvas = _dockA.node.canvas;
                 setAnchorPointA(dockA.getPositionInCanvas());
             }
         }
@@ -47,7 +49,6 @@ namespace Ogxd.NodeGraph {
                 _dockB = value;
                 _dockB.node.moved += NodeB_moved;
                 _dockB.pipe = this;
-                canvas = _dockB.node.canvas;
                 setAnchorPointB(dockB.getPositionInCanvas());
             }
         }
@@ -73,37 +74,37 @@ namespace Ogxd.NodeGraph {
             pathFigure.Segments.Add(bezier);
             path = new Path();
             path.IsHitTestVisible = false;
-            path.Stroke = Extensions.GetBrush((dockA != null)? dockA.type : dockB.type);
+            path.Stroke = graph.getPipeColor((dockA != null)? dockA.type : dockB.type);
             path.StrokeThickness = 2;
             path.Data = pathGeometry;
 
-            canvas.Children.Add(path);
-            ((UIElement)canvas.Parent).MouseMove += Canvas_MouseMove;
+            graph.canvas.Children.Add(path);
+            ((UIElement)graph.canvas.Parent).MouseMove += Canvas_MouseMove;
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e) {
             if (EditingPipe == null)
-                ((UIElement)canvas.Parent).MouseMove -= Canvas_MouseMove;
+                ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
 
             if (dockA == null) {
-                setAnchorPointA(Mouse.GetPosition(canvas));
+                setAnchorPointA(Mouse.GetPosition(graph.canvas));
             }
 
             if (dockB == null) {
-                setAnchorPointB(Mouse.GetPosition(canvas));
+                setAnchorPointB(Mouse.GetPosition(graph.canvas));
             }
         }
 
         private void setAnchorPointB(Point point) {
             Point D = point;
-            Point C = new Point(D.X - 100, D.Y);
+            Point C = new Point(D.X - graph.pipeStiffness, D.Y);
             bezier.Point2 = C;
             bezier.Point3 = D;
         }
 
         private void setAnchorPointA(Point point) {
             Point A = point;
-            Point B = new Point(A.X + 100, A.Y);
+            Point B = new Point(A.X + graph.pipeStiffness, A.Y);
             pathFigure.StartPoint = A;
             bezier.Point1 = B;
         }
@@ -117,8 +118,8 @@ namespace Ogxd.NodeGraph {
         }
 
         public void Dispose() {
-            canvas.Children.Remove(path);
-            ((UIElement)canvas.Parent).MouseMove -= Canvas_MouseMove;
+            graph.canvas.Children.Remove(path);
+            ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
         }
     }
 }

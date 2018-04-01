@@ -9,11 +9,14 @@ namespace Ogxd.NodeGraph {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
+        NodeGraph nodeGraph;
+
         public MainWindow() {
             InitializeComponent();
 
-            NodeGraph nodeGraph = new NodeGraph();
-            Content = nodeGraph;
+            nodeGraph = new NodeGraph();
+            container.Children.Add(nodeGraph);
 
             IntNode intNode1;
             IntNode intNode2;
@@ -27,19 +30,20 @@ namespace Ogxd.NodeGraph {
             nodeGraph.addNode(intToHexNode = new IntToHexNode() { position = new Point(700, 120) });
             nodeGraph.addNode(consoleOutputNode = new ConsoleOutputNode() { position = new Point(1050, 120) });
 
-            new Pipe(intNode1.outputs[0], additionNode.inputs[0]);
-            new Pipe(intNode2.outputs[0], additionNode.inputs[1]);
-            new Pipe(intToHexNode.outputs[0], consoleOutputNode.inputs[0]);
+
 
             Task.Run(() => {
                 Thread.Sleep(1);
                 Dispatcher.Invoke(() => {
-
+                    new Pipe(intNode1.outputs[0], additionNode.inputs[0]);
+                    new Pipe(intNode2.outputs[0], additionNode.inputs[1]);
+                    new Pipe(intToHexNode.outputs[0], consoleOutputNode.inputs[0]);
                 });
-
             });
+        }
 
-
+        private void runClick(object sender, RoutedEventArgs e) {
+            nodeGraph.process();
         }
     }
 }

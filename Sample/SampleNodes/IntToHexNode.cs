@@ -8,13 +8,15 @@ namespace Ogxd.NodeGraph {
 
     public class IntToHexNode : Node {
 
-        public IntToHexNode() : base() {
+        public override void setConnections() {
             addInput(0);
             addOutput(1);
         }
 
-        public override void process() {
-            //intValue.ToString("X");
+        public override object[] process(object[] ins) {
+            object[] results = new object[1];
+            results[0] = ((int)ins[0]).ToString();
+            return results;
         }
     }
 }

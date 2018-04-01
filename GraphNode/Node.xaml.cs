@@ -12,28 +12,35 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Linq;
 
 namespace WpfApp2 {
 
     /// <summary>
     /// Interaction logic for Node.xaml
     /// </summary>
-    public partial class Node : Border {
+    public abstract partial class Node : Border {
 
         public delegate void NodeEventHandler(Node node);
         public event NodeEventHandler moved;
 
-        public readonly Canvas canvas;
+        public Canvas canvas { get; private set; }
         private Nullable<Point> dragStart = null;
 
-        public Node(Canvas canvas) {
-            InitializeComponent();
+        public Dock[] inputs => stackInputs.Children.OfType<Dock>().ToArray();
+        public Dock[] outputs => stackOutputs.Children.OfType<Dock>().ToArray();
 
-            this.canvas = canvas;
+        public Node() {
+            InitializeComponent();
 
             MouseDown += mouseDown;
             MouseMove += mouseMove;
             MouseUp += mouseUp;
+        }
+
+        protected override void OnVisualParentChanged(DependencyObject oldParent) {
+            base.OnVisualParentChanged(oldParent);
+            this.canvas = Parent as Canvas;
         }
 
         private void mouseMove(object sender, MouseEventArgs args) {
@@ -62,27 +69,54 @@ namespace WpfApp2 {
             get { return new Point(Canvas.GetLeft(this), Canvas.GetTop(this)); }
             set { Canvas.SetLeft(this, value.X); Canvas.SetTop(this, value.Y); }
         }
+
+        public void addInput(Dock dock) {
+            stackInputs.Children.Add(dock);
+        }
+
+        public void removeInput(Dock dock) {
+            stackInputs.Children.Remove(dock);
+        }
+
+        public void addOutput(Dock dock) {
+            stackOutputs.Children.Add(dock);
+        }
+
+        public void removeOutput(Dock dock) {
+            stackOutputs.Children.Remove(dock);
+        }
+
+        public abstract void process();
     }
 
     public class ReaderNode : Node {
 
-        public ReaderNode(Canvas canvas) : base (canvas) {
-            stackOutputs.Children.Add(new Dock(this, 0, DockSide.OUT));
+        public ReaderNode() : base () {
+            addInput(new Dock(this, 0, DockSide.OUT));
+        }
+
+        public override void process() {
         }
     }
 
     public class NormalsNode : Node {
 
-        public NormalsNode(Canvas canvas) : base(canvas) {
-            stackInputs.Children.Add(new Dock(this, 0, DockSide.IN));
-            stackOutputs.Children.Add(new Dock(this, 1, DockSide.OUT));
+        public NormalsNode() : base() {
+            addInput(new Dock(this, 0, DockSide.IN));
+            addOutput(new Dock(this, 1, DockSide.OUT));
+        }
+
+        public override void process() {
         }
     }
 
     public class WriterNode : Node {
 
-        public WriterNode(Canvas canvas) : base(canvas) {
-            stackInputs.Children.Add(new Dock(this, 1, DockSide.IN));
+        public WriterNode() : base() {
+            addInput(new Dock(this, 1, DockSide.IN));
+        }
+
+        public override void process() {
         }
     }
 }

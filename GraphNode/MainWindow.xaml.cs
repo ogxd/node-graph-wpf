@@ -21,7 +21,12 @@ namespace WpfApp2 {
         public MainWindow() {
             InitializeComponent();
 
-            Content = new NodeGraph();
+            NodeGraph nodeGraph = new NodeGraph();
+            Content = nodeGraph;
+
+            nodeGraph.addNode(new ReaderNode() { position = new Point(10, 10) });
+            nodeGraph.addNode(new NormalsNode() { position = new Point(210, 110) });
+            nodeGraph.addNode(new WriterNode() { position = new Point(410, 210) });
         }
     }
 }

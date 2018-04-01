@@ -26,10 +26,6 @@ namespace WpfApp2 {
             InitializeComponent();
 
             this.MouseDown += NodeGraph_MouseDown;
-
-            canvas.Children.Add(new ReaderNode(canvas) { position = new Point(10, 10)});
-            canvas.Children.Add(new NormalsNode(canvas) { position = new Point(210, 110) });
-            canvas.Children.Add(new WriterNode(canvas) { position = new Point(410, 210) });
         }
 
         private void NodeGraph_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -37,6 +33,24 @@ namespace WpfApp2 {
                 Pipe.EditingPipe.Dispose();
                 Pipe.EditingPipe = null;
             }
+        }
+
+        public void addNode(Node node) {
+            canvas.Children.Add(node);
+        }
+
+        public void tryAddNode(Node node) {
+            if (!canvas.Children.Contains(node))
+                canvas.Children.Add(node);
+        }
+
+        public void removeNode(Node node) {
+            canvas.Children.Remove(node);
+        }
+
+        public void tryRemoveNode(Node node) {
+            if (canvas.Children.Contains(node))
+                canvas.Children.Remove(node);
         }
     }
 }

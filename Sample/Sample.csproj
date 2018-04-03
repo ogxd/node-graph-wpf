@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="SampleNodes\DuplicationNode.cs" />
     <Compile Include="SampleNodes\IntToHexNode.cs" />
     <Compile Include="SampleNodes\OutputNode.cs" />
     <Compile Include="App.xaml.cs">

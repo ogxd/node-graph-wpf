@@ -23,14 +23,14 @@ namespace Ogxd.NodeGraph {
             AdditionNode additionNode;
             IntToHexNode intToHexNode;
             ConsoleOutputNode consoleOutputNode;
+            DuplicaionNode duplicationNode;
 
             nodeGraph.addNode(intNode1 = new IntNode() { position = new Point(10, 10) });
             nodeGraph.addNode(intNode2 = new IntNode() { position = new Point(10, 230) });
             nodeGraph.addNode(additionNode = new AdditionNode() { position = new Point(350, 120) });
             nodeGraph.addNode(intToHexNode = new IntToHexNode() { position = new Point(700, 120) });
             nodeGraph.addNode(consoleOutputNode = new ConsoleOutputNode() { position = new Point(1050, 120) });
-
-
+            nodeGraph.addNode(duplicationNode = new DuplicaionNode() { position = new Point(350, 400) });
 
             Task.Run(() => {
                 Thread.Sleep(1);

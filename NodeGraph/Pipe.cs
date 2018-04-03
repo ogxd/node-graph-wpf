@@ -118,6 +118,10 @@ namespace Ogxd.NodeGraph {
         }
 
         public void Dispose() {
+            if (dockA != null)
+                dockA.pipe = null;
+            if (dockB != null)
+                dockB.pipe = null;
             graph.canvas.Children.Remove(path);
             ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -6,7 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Ogxd.NodeGraph {
+namespace Ogxd.NodeGraph
+{
 
     /// <summary>
     /// Interaction logic for Node.xaml
@@ -21,6 +23,7 @@ namespace Ogxd.NodeGraph {
 
         public Dock[] inputs => Dispatcher.Invoke(() => stackInputs.Children.OfType<Dock>().ToArray());
         public Dock[] outputs => Dispatcher.Invoke(() => stackOutputs.Children.OfType<Dock>().ToArray());
+        public Dictionary<string, object> parameters => Dispatcher.Invoke(() => stackParameters.Children.OfType<IProperty>().ToDictionary(x => x.label, y => y.value));
 
         public Node() {
             this.LoadViewFromUri("/Ogxd.NodeGraph;component/node.xaml");
@@ -67,6 +70,7 @@ namespace Ogxd.NodeGraph {
         public Dock addInput(int type) {
             Dock dock = new Dock(this, type, DockSide.IN);
             stackInputs.Children.Add(dock);
+            //stackInputs.UpdateLayout();
             //RenderSize = MeasureOverride(RenderSize);
             //RenderSize = ArrangeOverride(new Size(double.MaxValue, double.MaxValue));
             //Measure(new Size(double.MaxValue, double.MaxValue));
@@ -88,6 +92,20 @@ namespace Ogxd.NodeGraph {
             stackOutputs.Children.Remove(dock);
         }
 
+        public void clearOutputs() {
+            foreach (Dock output in outputs) {
+                if (output.pipe != null) {
+                    output.pipe.Dispose();
+                }
+            }
+            stackOutputs.Children.Clear();
+        }
+
+        public IProperty addProperty<IProperty>(IProperty property) {
+            stackParameters.Children.Add(property as UIElement);
+            return property;
+        }
+
         public void queryProcess() {
 
             // Makes sure all inputs are ready for processing. Otherwise, cancel.
@@ -97,10 +115,10 @@ namespace Ogxd.NodeGraph {
                     return;
 
             // Process the data (Overriding class implementation)
-            Dispatcher.Invoke(() => { BorderBrush = Brushes.White; });
-            Thread.Sleep(1000);
-            object[] results = process(ins.Select(x => x.pipe.result).ToArray());
-            Dispatcher.Invoke(() => { BorderBrush = Brushes.Black; });
+            Dispatcher.Invoke(() => { BorderThickness = new Thickness(2); });
+            Thread.Sleep(100);
+            object[] results = process(ins.Select(x => x.pipe.result).ToArray(), parameters);
+            Dispatcher.Invoke(() => { BorderThickness = new Thickness(0); });
 
             // Tranfers results to next nodes
             Dock[] outs = outputs;
@@ -112,6 +130,6 @@ namespace Ogxd.NodeGraph {
             }
         }
 
-        public abstract object[] process(object[] ins);
+        public abstract object[] process(object[] ins, Dictionary<string, object> parameters);
     }
 }

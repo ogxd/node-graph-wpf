@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Ogxd.NodeGraph {
 
@@ -20,7 +21,7 @@ namespace Ogxd.NodeGraph {
     /// <summary>
     /// Interaction logic for Dock.xaml
     /// </summary>
-    public partial class Dock : Border {
+    public partial class Dock : Button {
 
         public Pipe pipe;
 
@@ -34,6 +35,12 @@ namespace Ogxd.NodeGraph {
             this.type = type;
             this.side = side;
             this.node = node;
+
+            Click += Dock_Click;
+            MouseEnter += Border_MouseEnter;
+            MouseLeave += Border_MouseLeave;
+
+            IsHitTestVisible = true;
         }
 
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
@@ -44,7 +51,7 @@ namespace Ogxd.NodeGraph {
             return this.TransformToVisual(node).Transform(new Point(Canvas.GetLeft(node) + 8, Canvas.GetTop(node) + 8));
         }
 
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void Dock_Click(object sender, RoutedEventArgs e) {
             if (pipe != null) {
                 pipe.Dispose();
                 //Pipe.EditingPipe = null;

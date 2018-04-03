@@ -72,6 +72,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="NodeProperties\IntProperty.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NodeProperties\DoubleProperty.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NodeProperties\TextProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Node.xaml.cs">
@@ -79,6 +91,15 @@
     </Compile>
     <Compile Include="NodeGraph.xaml.cs">
       <DependentUpon>NodeGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NodeProperties\IntProperty.xaml.cs">
+      <DependentUpon>IntProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NodeProperties\DoubleProperty.xaml.cs">
+      <DependentUpon>DoubleProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NodeProperties\TextProperty.xaml.cs">
+      <DependentUpon>TextProperty.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pipe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -10,11 +10,12 @@ namespace Ogxd.NodeGraph {
 
         public override void setConnections() {
             addOutput(0);
+            addProperty(new IntProperty { label = "Integer", value = 5 });
         }
 
-        public override object[] process(object[] ins) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
             object[] results = new object[1];
-            results[0] = 10;
+            results[0] = (int)parameters["Integer"];
             return results;
         }
     }

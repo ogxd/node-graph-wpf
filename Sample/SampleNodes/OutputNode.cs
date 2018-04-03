@@ -12,7 +12,7 @@ namespace Ogxd.NodeGraph {
             addInput(1);
         }
 
-        public override object[] process(object[] ins) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
             Console.WriteLine("Result : " + ins[0]);
             return null;
         }

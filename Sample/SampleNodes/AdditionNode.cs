@@ -14,7 +14,7 @@ namespace Ogxd.NodeGraph {
             addOutput(0);
         }
 
-        public override object[] process(object[] ins) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
             object[] results = new object[1];
             results[0] = (int)ins[0] + (int)ins[1];
             return results;

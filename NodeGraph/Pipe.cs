@@ -19,41 +19,63 @@ namespace Ogxd.NodeGraph {
         public readonly BezierSegment bezier;
         public readonly Path path;
 
-        public NodeGraph graph => (dockA != null) ? dockA.node.graph : dockB.node.graph;
+        public NodeGraph graph => (inputDock != null) ? inputDock.node.graph : outputDock.node.graph;
 
         public object result = null;
 
-        private Dock _dockA;
-        public Dock dockA {
-            get { return _dockA; }
+        private InputDock _inputDock;
+        public InputDock inputDock {
+            get { return _inputDock; }
             set {
-                if (_dockA == value || _dockB == value)
+                if (_inputDock == value)
                     return;
 
                 EditingPipe = null;
-                _dockA = value;
-                _dockA.node.moved += NodeA_moved;
-                _dockA.pipe = this;
-                setAnchorPointA(dockA.getPositionInCanvas());
+                _inputDock = value;
+                _inputDock.node.moved += inputNodeMoved;
+                _inputDock.pipe = this;
+
+                if (_inputDock != null) {
+                    if (_inputDock.IsLoaded)
+                        setAnchorPointB(inputDock.getPositionInCanvas());
+                    else
+                        _inputDock.Loaded += _inputDock_Loaded;
+                }
             }
         }
 
-        private Dock _dockB;
-        public Dock dockB {
-            get { return _dockB; }
+        private OutputDock _outputDock;
+        public OutputDock outputDock {
+            get { return _outputDock; }
             set {
-                if (_dockA == value || _dockB == value)
+                if (_outputDock == value)
                     return;
 
                 EditingPipe = null;
-                _dockB = value;
-                _dockB.node.moved += NodeB_moved;
-                _dockB.pipe = this;
-                setAnchorPointB(dockB.getPositionInCanvas());
+                _outputDock = value;
+                _outputDock.node.moved += outputNodeMoved;
+                _outputDock.pipes.Add(this);
+                
+                if (_outputDock != null) {
+                    if (_outputDock.IsLoaded)
+                        setAnchorPointA(outputDock.getPositionInCanvas());
+                    else
+                        _outputDock.Loaded += _outputDock_Loaded;
+                }
             }
         }
 
-        public Pipe(Dock dockA, Dock dockB) {
+        private void _outputDock_Loaded(object sender, RoutedEventArgs e) {
+            _outputDock.Loaded -= _outputDock_Loaded;
+            setAnchorPointA(outputDock.getPositionInCanvas());
+        }
+
+        private void _inputDock_Loaded(object sender, RoutedEventArgs e) {
+            _inputDock.Loaded -= _inputDock_Loaded;
+            setAnchorPointB(inputDock.getPositionInCanvas());
+        }
+
+        public Pipe(OutputDock output, InputDock input) {
 
             bezier = new BezierSegment() {
                 IsStroked = true
@@ -66,15 +88,15 @@ namespace Ogxd.NodeGraph {
             pathFigure.IsClosed = false;
             pathGeometry.Figures.Add(pathFigure);
 
-            this.dockA = dockA;
-            this.dockB = dockB;
-            if (dockA == null || dockB == null)
+            this.inputDock = input;
+            this.outputDock = output;
+            if (input == null || output == null)
                 EditingPipe = this;
 
             pathFigure.Segments.Add(bezier);
             path = new Path();
             path.IsHitTestVisible = false;
-            path.Stroke = graph.getPipeColor((dockA != null)? dockA.type : dockB.type);
+            path.Stroke = graph.context.getPipeColor((input != null)? input.type : output.type);
             path.StrokeThickness = 2;
             path.Data = pathGeometry;
 
@@ -86,42 +108,40 @@ namespace Ogxd.NodeGraph {
             if (EditingPipe == null)
                 ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
 
-            if (dockA == null) {
+            if (outputDock == null) {
                 setAnchorPointA(Mouse.GetPosition(graph.canvas));
-            }
-
-            if (dockB == null) {
+            } else if (inputDock == null) {
                 setAnchorPointB(Mouse.GetPosition(graph.canvas));
             }
         }
 
         private void setAnchorPointB(Point point) {
             Point D = point;
-            Point C = new Point(D.X - graph.pipeStiffness, D.Y);
+            Point C = new Point(D.X - graph.context.pipeStiffness, D.Y);
             bezier.Point2 = C;
             bezier.Point3 = D;
         }
 
         private void setAnchorPointA(Point point) {
             Point A = point;
-            Point B = new Point(A.X + graph.pipeStiffness, A.Y);
+            Point B = new Point(A.X + graph.context.pipeStiffness, A.Y);
             pathFigure.StartPoint = A;
             bezier.Point1 = B;
         }
 
-        private void NodeA_moved(Node node) {
-            setAnchorPointA(dockA.getPositionInCanvas());
+        private void outputNodeMoved(Node node) {
+            setAnchorPointA(outputDock.getPositionInCanvas());
         }
 
-        private void NodeB_moved(Node node) {
-            setAnchorPointB(dockB.getPositionInCanvas());
+        private void inputNodeMoved(Node node) {
+            setAnchorPointB(inputDock.getPositionInCanvas());
         }
 
         public void Dispose() {
-            if (dockA != null)
-                dockA.pipe = null;
-            if (dockB != null)
-                dockB.pipe = null;
+            if (inputDock != null)
+                inputDock.pipe = null;
+            if (outputDock != null)
+                outputDock.pipes.Remove(this);
             graph.canvas.Children.Remove(path);
             ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
         }

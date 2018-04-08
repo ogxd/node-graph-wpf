@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Ogxd.NodeGraph {
 
-    public class DuplicaionNode : Node {
+    public class DuplicationNode : Node {
 
         IntProperty intProp;
 
         public override void setConnections() {
             //stackParameters.Children.
+            title = "Duplication";
             addInput(0);
             intProp = addProperty(new IntProperty { label = "Clones", value = 2 });
             intProp.valueChanged += IntProp_valueChanged;
@@ -26,8 +27,10 @@ namespace Ogxd.NodeGraph {
         }
 
         public override object[] process(object[] ins, Dictionary<string, object> parameters) {
-            object[] results = new object[1];
-            results[0] = (int)ins[0] + (int)ins[1];
+            object[] results = new object[(int)parameters["Clones"]];
+            for (int i = 0; i < (int)parameters["Clones"]; i++) {
+                results[i] = ins[0];
+            }
             return results;
         }
     }

@@ -51,8 +51,8 @@ namespace Ogxd.NodeGraph {
                 };
                 typeof(XamlReader).GetMethod("LoadBaml", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { stream, parserContext, userControl, true });
             }
-            catch (Exception) {
-                //log
+            catch (Exception exception) {
+                Console.WriteLine("Initialize Component Error : " + exception);
             }
         }
     }

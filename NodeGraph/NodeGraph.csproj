@@ -56,18 +56,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Dock.xaml">
+    <Page Include="NodeChest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Dock.xaml.cs">
-      <DependentUpon>Dock.xaml</DependentUpon>
+    <Compile Include="Docking\Dock.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="NodeChest.xaml.cs">
+      <DependentUpon>NodeChest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Docking\OutputDock.cs" />
+    <Compile Include="Docking\InputDock.cs" />
     <Compile Include="Extensions.cs" />
-    <Page Include="Node.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="NodeGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,12 +86,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Node.xaml.cs">
-      <DependentUpon>Node.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NodeGraph.xaml.cs">
       <DependentUpon>NodeGraph.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NodeGraphContext.cs" />
     <Compile Include="NodeProperties\IntProperty.xaml.cs">
       <DependentUpon>IntProperty.xaml</DependentUpon>
     </Compile>
@@ -126,6 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Background.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

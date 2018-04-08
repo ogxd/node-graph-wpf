@@ -9,6 +9,7 @@ namespace Ogxd.NodeGraph {
     public class IntNode : Node {
 
         public override void setConnections() {
+            title = "Integer";
             addOutput(0);
             addProperty(new IntProperty { label = "Integer", value = 5 });
         }

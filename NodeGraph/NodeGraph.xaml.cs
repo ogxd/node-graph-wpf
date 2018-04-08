@@ -15,23 +15,38 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Ogxd.NodeGraph {
-    /// <summary>
-    /// Interaction logic for NodeGraph.xaml
-    /// </summary>
+
     public partial class NodeGraph : Border {
 
-        public double pipeStiffness { get; set; } = 50;
+        public readonly NodeGraphContext context;
 
-        public delegate Brush TypeToBrushHandler(int type);
-
-        public TypeToBrushHandler typeToBrushHandler { get; set; } = (type) => {
-            return new SolidColorBrush(Extensions.GetUniqueColor(type));
-        };
-
-        public NodeGraph() {
+        public NodeGraph(NodeGraphContext context) {
             InitializeComponent();
 
+            this.context = context;
+
             this.MouseDown += NodeGraph_MouseDown;
+            this.DragEnter += Canvas_DragEnter;
+            this.Drop += NodeGraph_Drop;
+            this.AllowDrop = true;
+        }
+
+        private void NodeGraph_Drop(object sender, DragEventArgs e) {
+            Node node = e.Data.GetData("node") as Node;
+            if (node == null)
+                return;
+            Node copy = Activator.CreateInstance(node.GetType()) as Node;
+            addNode(copy);
+            copy.position = e.GetPosition(canvas);
+        }
+
+        private void Canvas_DragEnter(object sender, DragEventArgs e) {
+            Node node = e.Data.GetData("node") as Node;
+            if (node == null || sender == e.Source) {
+                e.Effects = DragDropEffects.None;
+            } else {
+                e.Effects = DragDropEffects.Copy;
+            }
         }
 
         private void NodeGraph_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -41,42 +56,61 @@ namespace Ogxd.NodeGraph {
             }
         }
 
-        public void addNode(Node node) {
+        public T addNode<T>(T node) where T : Node {
             canvas.Children.Add(node);
             node.setConnections();
+            return node;
         }
 
-        public void tryAddNode(Node node) {
+        public bool tryAddNode(Node node) {
             if (!canvas.Children.Contains(node)) {
                 canvas.Children.Add(node);
                 node.setConnections();
+                return true;
             }
+            return false;
         }
 
         public void removeNode(Node node) {
             canvas.Children.Remove(node);
+            node.Dispose();
         }
 
-        public void tryRemoveNode(Node node) {
+        public bool tryRemoveNode(Node node) {
             if (canvas.Children.Contains(node)) {
                 canvas.Children.Remove(node);
+                node.Dispose();
+                return true;
             }
+            return false;
         }
 
-        public Brush getPipeColor(int type) {
-            return typeToBrushHandler.Invoke(type);
+        public void autoArrange() {
+            Node[] nodes = canvas.Children.OfType<Node>().ToArray();
+            Dictionary<int, int> columns = new Dictionary<int, int>();
+            for (int i = 0; i < nodes.Length; i++) {
+                int maxDepth = nodes[i].getMaximumDepth();
+                if (columns.ContainsKey(maxDepth)) {
+                    columns[maxDepth]++;
+                } else {
+                    columns.Add(maxDepth, 1);
+                }
+                nodes[i].position = new Point(maxDepth * 350, columns[maxDepth] * 100);
+            }
         }
 
         public void process() {
             var nodes = canvas.Children.OfType<Node>();
+            // Clears all the previous run results
             foreach (Node node in nodes) {
-                foreach (Dock dock in node.outputs) {
-                    if (dock.pipe != null) {
-                        dock.pipe.result = null;
+                foreach (OutputDock dock in node.getOutputs()) {
+                    foreach (Pipe pipe in dock.pipes) {
+                        pipe.result = null;
                     }
                 }
             }
-            foreach (Node node in nodes.Where(x => x.inputs.Length == 0)) {
+            // Runs !
+            foreach (Node node in nodes.Where(x => x.getInputs().Length == 0)) {
                 Thread thread = new Thread(new ThreadStart(() => {
                     node.queryProcess();
                 }));

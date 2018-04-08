@@ -9,6 +9,7 @@ namespace Ogxd.NodeGraph {
     public class ConsoleOutputNode : Node {
 
         public override void setConnections() {
+            title = "Console";
             addInput(1);
         }
 

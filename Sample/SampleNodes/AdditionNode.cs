@@ -9,6 +9,7 @@ namespace Ogxd.NodeGraph {
     public class AdditionNode : Node {
 
         public override void setConnections() {
+            title = "Addition";
             addInput(0);
             addInput(0);
             addOutput(0);

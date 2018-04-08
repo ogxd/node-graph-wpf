@@ -9,6 +9,7 @@ namespace Ogxd.NodeGraph {
     public class IntToHexNode : Node {
 
         public override void setConnections() {
+            title = "To string";
             addInput(0);
             addOutput(1);
         }

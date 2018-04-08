@@ -8,10 +8,17 @@
         Title="MainWindow" Height="600" Width="1700">
     <Grid>
         <Grid x:Name="container">
-            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
         </Grid>
-        <Grid>
-            <Button Panel.ZIndex="1000" Width="100" Height="35" Content="Run" VerticalAlignment="Bottom" Click="runClick"/>
-        </Grid>
+        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+            <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Run" Click="runClick"/>
+            <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Add" Click="addClick"/>
+            <Button Panel.ZIndex="1000" Width="100" Height="25" Content="ReArrange" Click="rearrange"/>
+        </StackPanel> 
     </Grid>
 </Window>

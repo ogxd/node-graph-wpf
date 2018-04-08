@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Ogxd.NodeGraph
-{
+namespace Ogxd.NodeGraph {
 
     /// <summary>
     /// Logique d'interaction pour TextProperty.xaml
     /// </summary>
-    public partial class IntProperty : Grid, IProperty
-    {
+    public partial class IntProperty : Grid, IProperty {
+
         public event VoidHandler valueChanged;
 
         public IntProperty() {

@@ -90,12 +90,14 @@
       <DependentUpon>NodeGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="NodeGraphContext.cs" />
+    <Compile Include="NodeGraphOrientation.cs" />
     <Compile Include="NodeProperties\IntProperty.xaml.cs">
       <DependentUpon>IntProperty.xaml</DependentUpon>
     </Compile>
     <Compile Include="NodeProperties\DoubleProperty.xaml.cs">
       <DependentUpon>DoubleProperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NodeProperties\IProperty.cs" />
     <Compile Include="NodeProperties\TextProperty.xaml.cs">
       <DependentUpon>TextProperty.xaml</DependentUpon>
     </Compile>

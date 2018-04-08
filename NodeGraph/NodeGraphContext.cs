@@ -2,13 +2,6 @@
 
 namespace Ogxd.NodeGraph {
 
-    public enum NodeGraphOrientation {
-        LeftToRight,
-        RightToLeft,
-        UpToBottom,
-        BottomToUp
-    }
-
     public class NodeGraphContext {
 
         public delegate Brush TypeToBrushHandler(int type);

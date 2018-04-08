@@ -8,14 +8,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Navigation;
 
 namespace Ogxd.NodeGraph {
 
-    public class InputDock : Dock {
+    /// <summary>
+    /// InputDock for input data channel
+    /// </summary>
+    public sealed class InputDock : Dock {
 
+        /// <summary>
+        /// Connected pipe.
+        /// An InputDock can have only one Pipe connected at once (or none if unassigned)
+        /// </summary>
         public Pipe pipe;
 
         public InputDock(Node node, int type) : base(node, type) {
@@ -37,7 +42,7 @@ namespace Ogxd.NodeGraph {
             }
 
             if (isCompatibleWithEditingPipe()) {
-                // Prevent from having duplicate pipes
+                /// Prevent from having duplicate pipes
                 if (Pipe.EditingPipe.outputDock.pipes.Any(x => x.inputDock == this))
                     return;
                 Pipe.EditingPipe.inputDock = this;

@@ -6,11 +6,18 @@ using System.Windows.Media;
 namespace Ogxd.NodeGraph {
 
     /// <summary>
-    /// Interaction logic for Dock.xaml
+    /// Abstract class that defines a visual anchor point for Pipes.
     /// </summary>
     public abstract class Dock : Border {
 
+        /// <summary>
+        /// Node associated with this Dock
+        /// </summary>
         public readonly Node node;
+
+        /// <summary>
+        /// Type restriction for this Dock
+        /// </summary>
         public readonly int type;
 
         public Dock(Node node, int type) {
@@ -31,7 +38,7 @@ namespace Ogxd.NodeGraph {
 
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
             base.OnVisualParentChanged(oldParent);
-            Background = node.context.getPipeColor(type);
+            Background = node.context.getPipeColor(type); /// Sets the background color to match the color selection delegate from the current NodeGraphContext
         }
 
         public Point getPositionInCanvas() {

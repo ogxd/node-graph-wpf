@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Ogxd.NodeGraph {
 
-    public class OutputDock : Dock {
+    /// <summary>
+    /// OutputDock for output data (processed by the Node)
+    /// </summary>
+    public sealed class OutputDock : Dock {
 
+        /// <summary>
+        /// Connected Pipes. Can be any number. The data gets distributed to all connected InputDocks
+        /// </summary>
         public HashSet<Pipe> pipes = new HashSet<Pipe>();
 
         public OutputDock(Node node, int type) : base(node, type) {

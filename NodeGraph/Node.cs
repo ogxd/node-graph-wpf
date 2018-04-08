@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -51,7 +49,7 @@ namespace Ogxd.NodeGraph {
             Width = 250;
             MinHeight = 50;
             CornerRadius = new CornerRadius(5);
-            var converter = new System.Windows.Media.BrushConverter();
+            var converter = new BrushConverter();
             Background = (Brush)converter.ConvertFromString("#262626");
             BorderBrush = Brushes.White;
             BorderThickness = new Thickness(0);

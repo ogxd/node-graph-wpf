@@ -30,6 +30,7 @@ namespace Ogxd.NodeGraph {
             nodeChest.addNode(new IntToHexNode());
             nodeChest.addNode(new ConsoleOutputNode());
             nodeChest.addNode(new DuplicationNode());
+            nodeChest.addNode(new ShuffleNode());
 
             nodeGraph = new NodeGraph(context);
             container.Children.Add(nodeGraph);

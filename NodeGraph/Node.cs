@@ -119,6 +119,7 @@ namespace Ogxd.NodeGraph {
                     Grid.SetColumn(stackParameters, 1);
                     Grid.SetColumn(stackOutputs, 2);
 
+                    Grid.SetRow(titleUI, 0);
                     Grid.SetRow(stackInputs, 1);
                     Grid.SetRow(stackParameters, 1);
                     Grid.SetRow(stackOutputs, 1);
@@ -141,6 +142,7 @@ namespace Ogxd.NodeGraph {
                     Grid.SetColumn(stackParameters, 1);
                     Grid.SetColumn(stackOutputs, 0);
 
+                    Grid.SetRow(titleUI, 0);
                     Grid.SetRow(stackInputs, 1);
                     Grid.SetRow(stackParameters, 1);
                     Grid.SetRow(stackOutputs, 1);
@@ -288,6 +290,15 @@ namespace Ogxd.NodeGraph {
 
         public void removeOutput(Dock dock) {
             stackOutputs.Children.Remove(dock);
+        }
+
+        public void clearInputs() {
+            foreach (InputDock input in getInputs()) {
+                if (input.pipe != null) {
+                    input.pipe.Dispose();
+                }
+            }
+            stackInputs.Children.Clear();
         }
 
         public void clearOutputs() {

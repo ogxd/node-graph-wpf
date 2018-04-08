@@ -69,6 +69,7 @@
     <Compile Include="FloatingChest.xaml.cs">
       <DependentUpon>FloatingChest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SampleNodes\ShuffleNode.cs" />
     <Compile Include="SampleNodes\DuplicationNode.cs" />
     <Compile Include="SampleNodes\IntToHexNode.cs" />
     <Compile Include="SampleNodes\OutputNode.cs" />

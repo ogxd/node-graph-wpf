@@ -21,7 +21,22 @@ namespace Ogxd.NodeGraph {
 
         public NodeChest(NodeGraphContext context) {
             InitializeComponent();
+            context.propertyChanged += Context_propertyChanged;
             this.context = context;
+        }
+
+        private void Context_propertyChanged(string propertyName) {
+            switch (propertyName) {
+                case "orientation":
+                    foreach (Node node in getNodes()) {
+                        node.updateOrientation();
+                    }
+                    break;
+            }
+        }
+
+        public Node[] getNodes() {
+            return wrapPanel.Children.OfType<Node>().ToArray();
         }
 
         public void addNode(Node node) {

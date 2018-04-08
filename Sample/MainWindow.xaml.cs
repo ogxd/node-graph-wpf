@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,17 +13,23 @@ namespace Ogxd.NodeGraph {
     public partial class MainWindow : Window {
 
         NodeGraph nodeGraph;
+        NodeChest nodeChest;
+        NodeGraphContext context;
 
         public MainWindow() {
             InitializeComponent();
 
-            NodeGraphContext context = new NodeGraphContext();
+            context = new NodeGraphContext();
 
-            NodeChest chest = new NodeChest(context);
-            container.Children.Add(chest);
-            Grid.SetRow(chest, 2);
-            chest.addNode(new AdditionNode());
-            chest.addNode(new IntNode());
+            nodeChest = new NodeChest(context);
+            container.Children.Add(nodeChest);
+            Grid.SetRow(nodeChest, 2);
+
+            nodeChest.addNode(new AdditionNode());
+            nodeChest.addNode(new IntNode());
+            nodeChest.addNode(new IntToHexNode());
+            nodeChest.addNode(new ConsoleOutputNode());
+            nodeChest.addNode(new DuplicationNode());
 
             nodeGraph = new NodeGraph(context);
             container.Children.Add(nodeGraph);
@@ -34,14 +41,6 @@ namespace Ogxd.NodeGraph {
             AdditionNode additionNode3 = nodeGraph.addNode(new AdditionNode() { position = new Point(500, 160) });
             IntToHexNode intToHexNode = nodeGraph.addNode(intToHexNode = new IntToHexNode() { position = new Point(700, 120) });
             ConsoleOutputNode consoleOutputNode = nodeGraph.addNode(consoleOutputNode = new ConsoleOutputNode() { position = new Point(1050, 120) });
-
-            var a = new IntToHexNode() { position = new Point(700, 120) };
-            Task.Run(() => {
-                Thread.Sleep(10);
-                Dispatcher.Invoke(() => {
-                    nodeGraph.addNode(a);
-                });
-            });
             
             new Pipe(intNode1.getOutputs()[0], additionNode1.getInputs()[0]);
             new Pipe(intNode1.getOutputs()[0], additionNode2.getInputs()[0]);
@@ -67,6 +66,20 @@ namespace Ogxd.NodeGraph {
 
         private void rearrange(object sender, RoutedEventArgs e) {
             nodeGraph.autoArrange();
+        }
+
+        private void rotate(object sender, RoutedEventArgs e) {
+            context.orientation = GetNextEnumValueOf(context.orientation);
+        }
+
+        public static NodeGraphOrientation GetNextEnumValueOf(NodeGraphOrientation value) {
+            var values = (NodeGraphOrientation[])Enum.GetValues(typeof(NodeGraphOrientation));
+            var nextValues = values.Where(x => (int)x > (int)value);
+            if (nextValues.Count() == 0) {
+                return values.First();
+            } else {
+                return nextValues.First();
+            }
         }
     }
 }

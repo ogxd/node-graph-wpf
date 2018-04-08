@@ -20,15 +20,37 @@ namespace Ogxd.NodeGraph {
 
         public readonly NodeGraphContext context;
 
+        private double _pipeStiffness = 50;
+        public double pipeStiffness {
+            get {
+                return _pipeStiffness;
+            }
+            set {
+                if (_pipeStiffness == value)
+                    return;
+            }
+        }
+
         public NodeGraph(NodeGraphContext context) {
             InitializeComponent();
 
+            context.propertyChanged += Context_propertyChanged;
             this.context = context;
 
             this.MouseDown += NodeGraph_MouseDown;
             this.DragEnter += Canvas_DragEnter;
             this.Drop += NodeGraph_Drop;
             this.AllowDrop = true;
+        }
+
+        private void Context_propertyChanged(string propertyName) {
+            switch (propertyName) {
+                case "orientation":
+                    foreach (Node node in getNodes()) {
+                        node.updateOrientation();
+                    }
+                    break;
+            }
         }
 
         private void NodeGraph_Drop(object sender, DragEventArgs e) {
@@ -86,21 +108,50 @@ namespace Ogxd.NodeGraph {
         }
 
         public void autoArrange() {
-            Node[] nodes = canvas.Children.OfType<Node>().ToArray();
+
+            Node[] nodes = getNodes();
             Dictionary<int, int> columns = new Dictionary<int, int>();
+            int maxMaxDepth = -1;
+
             for (int i = 0; i < nodes.Length; i++) {
                 int maxDepth = nodes[i].getMaximumDepth();
+                if (maxDepth > maxMaxDepth)
+                    maxMaxDepth = maxDepth;
+            }
+
+            for (int i = 0; i < nodes.Length; i++) {
+                int maxDepth = nodes[i].getMaximumDepth();
+
                 if (columns.ContainsKey(maxDepth)) {
                     columns[maxDepth]++;
-                } else {
+                }
+                else {
                     columns.Add(maxDepth, 1);
                 }
-                nodes[i].position = new Point(maxDepth * 350, columns[maxDepth] * 100);
+
+                switch (context.orientation) {
+                    case NodeGraphOrientation.LeftToRight:
+                        nodes[i].position = new Point(maxDepth * 350, columns[maxDepth] * 100);
+                        break;
+                    case NodeGraphOrientation.RightToLeft:
+                        nodes[i].position = new Point((maxMaxDepth - maxDepth) * 350, columns[maxDepth] * 100);
+                        break;
+                    case NodeGraphOrientation.UpToBottom:
+                        nodes[i].position = new Point(columns[maxDepth] * 270, maxDepth * 150);
+                        break;
+                    case NodeGraphOrientation.BottomToUp:
+                        nodes[i].position = new Point(columns[maxDepth] * 270, (maxMaxDepth - maxDepth) * 150);
+                        break;
+                }
             }
         }
 
+        public Node[] getNodes() {
+            return canvas.Children.OfType<Node>().ToArray();
+        }
+
         public void process() {
-            var nodes = canvas.Children.OfType<Node>();
+            var nodes = getNodes();
             // Clears all the previous run results
             foreach (Node node in nodes) {
                 foreach (OutputDock dock in node.getOutputs()) {

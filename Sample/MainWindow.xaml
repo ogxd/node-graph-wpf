@@ -19,6 +19,7 @@
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Run" Click="runClick"/>
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Add" Click="addClick"/>
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="ReArrange" Click="rearrange"/>
+            <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Rotate" Click="rotate"/>
         </StackPanel> 
     </Grid>
 </Window>

@@ -15,7 +15,6 @@ namespace Ogxd.NodeGraph {
         }
 
         internal override void onDockClick(object sender, RoutedEventArgs e) {
-            Console.WriteLine("Dock clicked !");
             if (node.isTemplate)
                 return;
 

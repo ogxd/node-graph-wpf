@@ -56,38 +56,15 @@ namespace Ogxd.NodeGraph {
             BorderBrush = Brushes.White;
             BorderThickness = new Thickness(0);
 
-            grid = new Grid {};
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-
             titleUI = new TextBlock {
                 Foreground = Brushes.White,
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-            //stackInputs = new StackPanel { Margin = new Thickness(-8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
-            stackInputs = new StackPanel { Margin = new Thickness(-8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
+
+            stackInputs = new StackPanel();
             stackParameters = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            stackOutputs = new StackPanel { Margin = new Thickness(0, 0, -8, 0), VerticalAlignment = VerticalAlignment.Center };
-
-            Child = grid;
-
-            grid.Children.Add(titleUI);
-            grid.Children.Add(stackInputs);
-            grid.Children.Add(stackParameters);
-            grid.Children.Add(stackOutputs);
-
-            Grid.SetColumn(titleUI, 1);
-            Grid.SetColumn(stackInputs, 0);
-            Grid.SetColumn(stackParameters, 1);
-            Grid.SetColumn(stackOutputs, 2);
-
-            Grid.SetRow(stackInputs, 1);
-            Grid.SetRow(stackParameters, 1);
-            Grid.SetRow(stackOutputs, 1);
+            stackOutputs = new StackPanel();
 
             PreviewMouseLeftButtonDown += Node_PreviewMouseLeftButtonDown;
             MouseDown += mouseDown;
@@ -107,6 +84,107 @@ namespace Ogxd.NodeGraph {
             base.OnVisualParentChanged(oldParent);
             this.graph = (Parent as Canvas)?.Parent as NodeGraph;
             this.chest = (Parent as WrapPanel)?.Parent as NodeChest;
+
+            updateOrientation();
+        }
+
+        public void updateOrientation() {
+
+            if (grid != null)
+                grid.Children.Clear();
+
+            grid = new Grid();
+            switch (context.orientation) {
+                case NodeGraphOrientation.LeftToRight:
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+
+                    stackInputs.Orientation = Orientation.Vertical;
+                    stackInputs.Margin = new Thickness(-8, 0, 0, 0);
+                    stackInputs.VerticalAlignment = VerticalAlignment.Center;
+                    stackOutputs.Margin = new Thickness(0, 0, -8, 0);
+                    stackOutputs.VerticalAlignment = VerticalAlignment.Center;
+
+                    Grid.SetColumn(titleUI, 1);
+                    Grid.SetColumn(stackInputs, 0);
+                    Grid.SetColumn(stackParameters, 1);
+                    Grid.SetColumn(stackOutputs, 2);
+
+                    Grid.SetRow(stackInputs, 1);
+                    Grid.SetRow(stackParameters, 1);
+                    Grid.SetRow(stackOutputs, 1);
+                    break;
+                case NodeGraphOrientation.RightToLeft:
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+
+                    stackInputs.Orientation = Orientation.Vertical;
+                    stackInputs.Margin = new Thickness(0, 0, -8, 0);
+                    stackInputs.VerticalAlignment = VerticalAlignment.Center;
+                    stackOutputs.Margin = new Thickness(-8, 0, 0, 0);
+                    stackOutputs.VerticalAlignment = VerticalAlignment.Center;
+
+                    Grid.SetColumn(titleUI, 1);
+                    Grid.SetColumn(stackInputs, 2);
+                    Grid.SetColumn(stackParameters, 1);
+                    Grid.SetColumn(stackOutputs, 0);
+
+                    Grid.SetRow(stackInputs, 1);
+                    Grid.SetRow(stackParameters, 1);
+                    Grid.SetRow(stackOutputs, 1);
+                    break;
+                case NodeGraphOrientation.UpToBottom:
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8) });
+
+                    stackInputs.Orientation = Orientation.Horizontal;
+                    stackInputs.Margin = new Thickness(0, -8, 0, 0);
+                    stackInputs.HorizontalAlignment = HorizontalAlignment.Center;
+                    stackOutputs.Margin = new Thickness(0, 0, 0, -8);
+                    stackOutputs.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    Grid.SetRow(stackInputs, 0);
+                    Grid.SetRow(titleUI, 1);
+                    Grid.SetRow(stackParameters, 2);
+                    Grid.SetRow(stackOutputs, 3);
+                    break;
+                case NodeGraphOrientation.BottomToUp:
+                    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8) });
+
+                    stackInputs.Orientation = Orientation.Horizontal;
+                    stackInputs.Margin = new Thickness(0, 0, 0, -8);
+                    stackInputs.HorizontalAlignment = HorizontalAlignment.Center;
+                    stackOutputs.Margin = new Thickness(0, -8, 0, 0);
+                    stackOutputs.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    Grid.SetRow(stackInputs, 3);
+                    Grid.SetRow(titleUI, 1);
+                    Grid.SetRow(stackParameters, 2);
+                    Grid.SetRow(stackOutputs, 0);
+                    break;
+            }
+
+            Child = grid;
+
+            grid.Children.Add(titleUI);
+            grid.Children.Add(stackInputs);
+            grid.Children.Add(stackParameters);
+            grid.Children.Add(stackOutputs);
+
+            moved?.Invoke(this);
         }
 
         private void mouseMove(object sender, MouseEventArgs args) {

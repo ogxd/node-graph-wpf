@@ -116,17 +116,39 @@ namespace Ogxd.NodeGraph {
         }
 
         private void setAnchorPointB(Point point) {
-            Point D = point;
-            Point C = new Point(D.X - graph.context.pipeStiffness, D.Y);
-            bezier.Point2 = C;
-            bezier.Point3 = D;
+            bezier.Point3 = point;
+            switch (graph.context.orientation) {
+                case NodeGraphOrientation.LeftToRight:
+                    bezier.Point2 = new Point(bezier.Point3.X - graph.pipeStiffness, bezier.Point3.Y);
+                    break;
+                case NodeGraphOrientation.RightToLeft:
+                    bezier.Point2 = new Point(bezier.Point3.X + graph.pipeStiffness, bezier.Point3.Y);
+                    break;
+                case NodeGraphOrientation.UpToBottom:
+                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y - graph.pipeStiffness);
+                    break;
+                case NodeGraphOrientation.BottomToUp:
+                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y + graph.pipeStiffness);
+                    break;
+            }
         }
 
         private void setAnchorPointA(Point point) {
-            Point A = point;
-            Point B = new Point(A.X + graph.context.pipeStiffness, A.Y);
-            pathFigure.StartPoint = A;
-            bezier.Point1 = B;
+            pathFigure.StartPoint = point;
+            switch (graph.context.orientation) {
+                case NodeGraphOrientation.LeftToRight:
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X + graph.pipeStiffness, pathFigure.StartPoint.Y);
+                    break;
+                case NodeGraphOrientation.RightToLeft:
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X - graph.pipeStiffness, pathFigure.StartPoint.Y);
+                    break;
+                case NodeGraphOrientation.UpToBottom:
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y + graph.pipeStiffness);
+                    break;
+                case NodeGraphOrientation.BottomToUp:
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y - graph.pipeStiffness);
+                    break;
+            }
         }
 
         private void outputNodeMoved(Node node) {

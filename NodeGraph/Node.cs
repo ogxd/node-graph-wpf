@@ -80,8 +80,16 @@ namespace Ogxd.NodeGraph {
 
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
             base.OnVisualParentChanged(oldParent);
-            this.graph = (Parent as Canvas)?.Parent as NodeGraph;
-            this.chest = (Parent as WrapPanel)?.Parent as NodeChest;
+            DependencyObject current = this;
+            for (int i = 0; i < 5; i++) {
+                current = (current as FrameworkElement)?.Parent;
+                if (current == null)
+                    break;
+                graph = current as NodeGraph;
+                chest = current as NodeChest;
+                if (graph != null || chest != null)
+                    break;
+            }
 
             updateOrientation();
         }

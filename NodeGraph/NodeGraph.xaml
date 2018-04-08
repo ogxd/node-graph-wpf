@@ -6,14 +6,22 @@
              xmlns:local="clr-namespace:Ogxd.NodeGraph"
              mc:Ignorable="d" Background="#28303a"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Canvas x:Name="canvas" ClipToBounds="True">
-        <Canvas.Background>
-            <ImageBrush
+    <Border.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ScrollBar.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Border.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+        <Canvas x:Name="canvas" x:FieldModifier="public" ClipToBounds="True"  Height="3000" Width="3000">
+            <Canvas.Background>
+                <ImageBrush
                 ImageSource="Resources\Background.png"
                 TileMode="FlipXY"
                 Viewport="0,0,32,32"
                 ViewportUnits="Absolute"/>
-        </Canvas.Background>
-
-    </Canvas>
+            </Canvas.Background>
+        </Canvas>
+    </ScrollViewer>
 </Border>

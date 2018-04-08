@@ -29,7 +29,7 @@ namespace Ogxd.NodeGraph {
         }
 
         public void addNode(Node node) {
-            node.Margin = new Thickness(20);
+            node.Margin = new Thickness(15);
             wrapPanel.Children.Add(node);
             node.setConnections();
         }

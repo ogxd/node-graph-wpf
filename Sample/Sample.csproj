@@ -58,10 +58,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="FloatingChest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="FloatingChest.xaml.cs">
+      <DependentUpon>FloatingChest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleNodes\DuplicationNode.cs" />
     <Compile Include="SampleNodes\IntToHexNode.cs" />
     <Compile Include="SampleNodes\OutputNode.cs" />

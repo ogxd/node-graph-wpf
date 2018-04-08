@@ -22,8 +22,8 @@ namespace Ogxd.NodeGraph {
             context = new NodeGraphContext();
 
             nodeChest = new NodeChest(context);
-            container.Children.Add(nodeChest);
-            Grid.SetRow(nodeChest, 2);
+            //container.Children.Add(nodeChest);
+            //Grid.SetRow(nodeChest, 2);
 
             nodeChest.addNode(new AdditionNode());
             nodeChest.addNode(new IntNode());
@@ -33,6 +33,8 @@ namespace Ogxd.NodeGraph {
 
             nodeGraph = new NodeGraph(context);
             container.Children.Add(nodeGraph);
+            FloatingChest fchest = new FloatingChest(nodeChest, nodeGraph);
+            nodeGraph.canvas.Children.Add(fchest);
 
             IntNode intNode1 = nodeGraph.addNode(new IntNode() { position = new Point(10, 10) });
             IntNode intNode2 = nodeGraph.addNode(new IntNode() { position = new Point(10, 230) });

@@ -35,6 +35,14 @@ namespace Ogxd.NodeGraph {
             IntToHexNode intToHexNode = nodeGraph.addNode(intToHexNode = new IntToHexNode() { position = new Point(700, 120) });
             ConsoleOutputNode consoleOutputNode = nodeGraph.addNode(consoleOutputNode = new ConsoleOutputNode() { position = new Point(1050, 120) });
 
+            var a = new IntToHexNode() { position = new Point(700, 120) };
+            Task.Run(() => {
+                Thread.Sleep(10);
+                Dispatcher.Invoke(() => {
+                    nodeGraph.addNode(a);
+                });
+            });
+            
             new Pipe(intNode1.getOutputs()[0], additionNode1.getInputs()[0]);
             new Pipe(intNode1.getOutputs()[0], additionNode2.getInputs()[0]);
             new Pipe(intNode2.getOutputs()[0], additionNode1.getInputs()[1]);

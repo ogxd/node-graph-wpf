@@ -50,7 +50,7 @@ namespace Ogxd.NodeGraph {
         }
 
         private void NodeGraph_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (Pipe.EditingPipe != null && Mouse.DirectlyOver == this) {
+            if (Pipe.EditingPipe != null && (Mouse.DirectlyOver == this || Mouse.DirectlyOver == canvas)) {
                 Pipe.EditingPipe.Dispose();
                 Pipe.EditingPipe = null;
             }

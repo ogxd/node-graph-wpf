@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -44,6 +45,7 @@ namespace Ogxd.NodeGraph {
         private StackPanel stackInputs;
         private StackPanel stackParameters;
         private StackPanel stackOutputs;
+        private Grid grid;
 
         private void initialize() {
             Width = 250;
@@ -54,7 +56,7 @@ namespace Ogxd.NodeGraph {
             BorderBrush = Brushes.White;
             BorderThickness = new Thickness(0);
 
-            Grid grid = new Grid {};
+            grid = new Grid {};
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
@@ -66,6 +68,7 @@ namespace Ogxd.NodeGraph {
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center
             };
+            //stackInputs = new StackPanel { Margin = new Thickness(-8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
             stackInputs = new StackPanel { Margin = new Thickness(-8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
             stackParameters = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
             stackOutputs = new StackPanel { Margin = new Thickness(0, 0, -8, 0), VerticalAlignment = VerticalAlignment.Center };

@@ -23,6 +23,7 @@ namespace Ogxd.NodeGraph {
         }
 
         internal override void onDockClick(object sender, RoutedEventArgs e) {
+
             if (node.isTemplate)
                 return;
 

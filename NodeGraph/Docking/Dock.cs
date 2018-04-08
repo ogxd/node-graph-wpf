@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Ogxd.NodeGraph {
 
@@ -30,6 +19,7 @@ namespace Ogxd.NodeGraph {
             Background = Brushes.White;
             BorderBrush = Brushes.Black;
             BorderThickness = new Thickness(2);
+            CornerRadius = new CornerRadius(8);
 
             this.type = type;
             this.node = node;
@@ -40,6 +30,7 @@ namespace Ogxd.NodeGraph {
         }
 
         protected override void OnVisualParentChanged(DependencyObject oldParent) {
+            base.OnVisualParentChanged(oldParent);
             Background = node.context.getPipeColor(type);
         }
 
